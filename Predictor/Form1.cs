@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -13,7 +14,8 @@ namespace Predictor
 {
     public partial class Form1 : Form
     {
-        private const string APP_NAME = "ULTIMATE PREDICTOR"; 
+        private const string APP_NAME = "ULTIMATE PREDICTOR";
+        private readonly string PREDICTIONS_CONFIG_PATH = $"{Environment.CurrentDirectory}\\predictionsConfig.json";
 
         public Form1()
         {
@@ -23,6 +25,20 @@ namespace Predictor
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = APP_NAME;
+
+            try
+            {
+                var data = File.ReadAllText(PREDICTIONS_CONFIG_PATH);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally 
+            {
+                
+            }   
         }
 
         private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
