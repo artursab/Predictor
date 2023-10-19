@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,8 @@ namespace Predictor
     {
         private const string APP_NAME = "ULTIMATE PREDICTOR";
         private readonly string PREDICTIONS_CONFIG_PATH = $"{Environment.CurrentDirectory}\\predictionsConfig.json";
+        private string[] _predictions;
+        private Random _random = new Random();
 
         public Form1()
         {
@@ -29,15 +32,25 @@ namespace Predictor
             try
             {
                 var data = File.ReadAllText(PREDICTIONS_CONFIG_PATH);
+
+                _predictions = JsonConvert.DeserializeObject<string[]>(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                MessageBox.Show(ex.Message);
             }
             finally 
             {
-                
+                if (_predictions == null)
+                {
+                    Close();
+                }
+                else if (_predictions.Length == 0)
+                {
+                    MessageBox.Show("Predictions ended!");
+                    Close();
+                }
             }   
         }
 
@@ -63,7 +76,11 @@ namespace Predictor
                 }
             });
 
-            MessageBox.Show("predicted");
+            var index = _random.Next(_predictions.Length);
+
+            var prediction = _predictions[index];
+
+            MessageBox.Show($"{prediction}!");
 
             progressBar1.Value = 0;
             this.Text = APP_NAME;
